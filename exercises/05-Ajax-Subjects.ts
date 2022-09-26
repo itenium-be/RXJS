@@ -6,13 +6,13 @@ import { sessionStorage } from './models/sessionStorage';
 
 
 // Dummy JSON API:
-// https://dummyjson.com/docs/auth
+// https://dummyjson.com/docs/products
 // Use QueryString to filter: /products?limit=10&skip=10&q=phone
 
 
 // Exercises:
 // - Addjust the queryString with pagination$
-// - Call the correct urls based on filters$
+// - Call the correct urls based on filters$ (see docs)
 // - Make sure that all changes < 600ms result in only one API call
 // - If nothing has actually changed, don't call the API
 // - What about filters.query with special characters?
