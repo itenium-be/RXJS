@@ -38,4 +38,95 @@ const products$ = ajax.getJSON<AjaxProductsResponse>(`${baseUri}?limit=3`).pipe(
 
 
 
-export const ajaxSubjects$ = products$;
+// export const ajaxSubjects$ = products$;
+
+
+
+
+// Solution:
+
+// Could also do the comparison manually...
+// npm install --save deep-equal
+const equal = require('deep-equal');
+
+
+export const ajaxSubjects$ = combineLatest([
+    pagination$.pipe(startWith(initialPagination)),
+    filters$.pipe(startWith(initialFilters)),
+  ]).pipe(
+  map(([pagination, filters]) => ({pagination, filters})),
+  distinctUntilChanged(equal),
+  debounceTime(600),
+  tap(filters => console.log('About to call API with:', JSON.stringify(filters))),
+  switchMap(allFilters => {
+    const pagination = allFilters.pagination;
+    const filters = allFilters.filters;
+    if (filters.productId) {
+      return ajax.getJSON<AjaxProductsResponse>(`${baseUri}/${filters.productId}`);
+    }
+
+    if (filters.category) {
+      return ajax.getJSON<AjaxProductsResponse>(`${baseUri}/category/${filters.category}`);
+    }
+
+    let url = `${baseUri}?q=${encodeURIComponent(filters.query)}`;
+    url += `&limit=${pagination.limit}&skip=${pagination.skip}`;
+    return ajax.getJSON<AjaxProductsResponse>(url);
+  }),
+  map(resp => resp.products),
+);
+
+
+// Generate some random events:
+const randomizr$ = range(1, 10).pipe(
+  concatMap(i => of(i).pipe(delay(1000 + Math.random() * 4000))),
+);
+
+
+setTimeout(() => {
+  console.log('200ms -> emitting the initial value');
+  pagination$.next(initialPagination);
+  filters$.next(initialFilters);
+}, 200);
+
+
+setTimeout(() => {
+  console.log('800ms -> emitting the initial value');
+  pagination$.next(initialPagination);
+  filters$.next(initialFilters);
+}, 800);
+
+
+
+randomizr$.subscribe(val => {
+  console.log('Randomizr In Action');
+  if (Math.random() < 0.5) {
+    const newPag = {
+      limit: Math.floor(Math.random() * 10) + 1,
+      skip: Math.floor(Math.random() * 10),
+    };
+    console.log('New Pagination', JSON.stringify(newPag));
+    pagination$.next(newPag);
+  }
+
+  if (Math.random() < 0.5) {
+    const category = ProductCategories[Math.floor(Math.random() * ProductCategories.length)];
+    const newFilters = {
+      query: (Math.floor(Math.random() * 10) + 1).toString(),
+      productId: Math.random() < 0.2 ? Math.floor(Math.random() * 10) : null,
+      category: Math.random() < 0.2 ? category : null,
+    };
+    console.log('New Filters', JSON.stringify(newFilters));
+    filters$.next(newFilters);
+  }
+});
+
+
+// // setTimeout(() => {
+// //   const newPag = {
+// //     limit: Math.floor(Math.random() * 4) + 1,
+// //     skip: Math.floor(Math.random() * 10),
+// //   };
+// //   console.log('New Pagination', JSON.stringify(newPag));
+// //   pagination$.next(newPag);
+// // }, 1500);
