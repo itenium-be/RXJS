@@ -8,7 +8,6 @@ import { AjaxProductsResponse, Product } from './models/product-models';
 // https://dummyjson.com/docs/products
 // Use QueryString to filter: /products?limit=10&skip=10&q=phone
 
-
 // Exercises:
 // - Map the products to the GridProduct type
 // - Filter out products that are currently not in stock
