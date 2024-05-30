@@ -1,5 +1,7 @@
 import { fromEvent, throttleTime, map, scan } from 'rxjs';
 
+// Print clientX position but only once every second
+
 // Imperative
 let count = 0;
 let lastClick = Date.now();
@@ -18,7 +20,7 @@ fromEvent<MouseEvent>(document, 'click')
     map(event => event.clientX),
     scan((count, clientX) => count + clientX, 0)
   )
-  .subscribe((count) => console.log(count));
+  .subscribe(count => console.log(count));
 
 
 
