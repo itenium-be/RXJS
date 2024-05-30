@@ -1,7 +1,7 @@
 RXJS
 ====
 
-Node: 16.10.0
+Node: v22.1.0
 
 ```ps1
 cd exercises
