@@ -9,6 +9,9 @@ npm install
 npm start
 ```
 
+Update `exercises/index.ts` to switch between different exercises!
+
+
 Interesting Resources
 ---------------------
 
