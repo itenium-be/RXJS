@@ -12,6 +12,9 @@ npm start
 Update `exercises/index.ts` to switch between different exercises!
 
 
+For the Angular RXJS exercises see `exercises-angular/README.md`
+
+
 Interesting Resources
 ---------------------
 
