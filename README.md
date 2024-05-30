@@ -29,13 +29,12 @@ Interesting Resources
 Theoretical Stuff
 -----------------
 
-Learning curve image:
-RxJS learning curve? No.. Learning cliff!
-https://twitter.com/hoss/status/742643506536153088
+[RxJS learning curve? No.. Learning cliff](https://twitter.com/hoss/status/742643506536153088)!
 
 
-TODO:
+TODO
+----
+
 - RXJS example hot vs cold --> & check network tab
-- Github
-    - RXJS exercises
-    - Something to vizualize the marbles? It's builtin RXJS with TestScheduler?
+- Something to vizualize the marbles? It's builtin RXJS with TestScheduler?
+- Finalize the pptx with some additional infos
