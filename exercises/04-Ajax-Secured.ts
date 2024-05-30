@@ -44,4 +44,70 @@ export const login$ = ajax<LoginResponse>({
 
 
 
-export const ajaxSecured$ = login$;
+// export const ajaxSecured$ = login$;
+
+
+
+
+// Solution:
+export const token$ = login$.pipe(
+  tap(resp => sessionStorage.setItem('access_token', resp.token)),
+  map(resp => {
+    const { token, ...userRest } = resp;
+    const user: User = {
+      ...userRest,
+      gender: resp.gender === "female" ? Gender.Female : Gender.Male,
+    };
+    sessionStorage.setItem('user', JSON.stringify(user));
+    return token;
+  }),
+);
+
+
+export const ajaxSecured$ = token$.pipe(
+  switchMap(token => ajax<AjaxProductsResponse>({
+    url: 'https://dummyjson.com/products?limit=3',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })),
+  map(resp => resp.response.products),
+);
+
+
+
+
+
+// Bonus Solution:
+// const dontMakeMeWaitTooLonFactor = 0.4;
+// const refresh$ = timer(0, expiresInMins * 60 * 1000 * dontMakeMeWaitTooLonFactor);
+
+
+// export const token$ = refresh$.pipe(
+//   mergeMap(() => login$),
+//   tap(resp => sessionStorage.setItem('access_token', resp.token)),
+//   map(resp => {
+//     const { token, ...userRest } = resp;
+//     const user: User = {
+//       ...userRest,
+//       gender: resp.gender === "female" ? Gender.Female : Gender.Male,
+//     };
+//     sessionStorage.setItem('user', JSON.stringify(user));
+//     return token;
+//   }),
+// );
+
+
+// // At this point with every token refresh
+// // the products will be refetched as well
+// export const ajaxSecured$ = token$.pipe(
+//   switchMap(token => ajax<AjaxProductsResponse>({
+//     url: 'https://dummyjson.com/products?limit=1',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Authorization': `Bearer ${token}`,
+//     },
+//   })),
+//   map(resp => resp.response.products),
+// );

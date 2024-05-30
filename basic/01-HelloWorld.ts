@@ -11,7 +11,6 @@ document.addEventListener('click', (event: MouseEvent) => {
   }
 });
 
-
 // Declarative
 fromEvent<MouseEvent>(document, 'click')
   .pipe(
@@ -20,3 +19,13 @@ fromEvent<MouseEvent>(document, 'click')
     scan((count, clientX) => count + clientX, 0)
   )
   .subscribe((count) => console.log(count));
+
+
+
+
+
+
+
+
+
+
