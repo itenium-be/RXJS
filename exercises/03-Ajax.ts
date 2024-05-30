@@ -14,17 +14,9 @@ import { AjaxProductsResponse, Product } from './models/product-models';
 // - Log an error to the console if the http request fails
 // - Bonus: Download the Product thumbnails to a byte[] / base64 string
 
-// Solution 1:
-const url = "https://dummyjson.com/products?limit=3";
-export const ajax$: Observable<GridProduct[]> = ajax.getJSON<AjaxProductsResponse>(url).pipe(
-    map(response => response.products.filter(prod => !!prod.stock)),
-    map(products => products.map(prod => ({
-        id: prod.id,
-        title: prod.title,
-        category: prod.category,
-        calculatedPrice: prod.price - (prod.price * prod.discountPercentage / 100),
-        thumbnail: prod.thumbnail,
-    }))),
+
+export const ajax$ = ajax.getJSON<AjaxProductsResponse>('https://dummyjson.com/products?limit=3').pipe(
+    map(response => response.products)
 );
 
 
@@ -54,41 +46,3 @@ export const downloadThumbnail$ = ajax<{response: any}>({
     map(resp => resp.response)
 );
 
-
-
-
-
-
-
-
-
-
-
-
-// Bonus Solution:
-// export const ajax$: Observable<GridProduct[]> = ajax.getJSON<AjaxProductsResponse>('https://dummyjson.com/products?limit=1').pipe(
-//     map(response => response.products.filter(prod => !!prod.stock)),
-//     map(products => products.map<GridProduct>(prod => ({
-//         id: prod.id,
-//         title: prod.title,
-//         category: prod.category,
-//         calculatedPrice: prod.price - (prod.price * prod.discountPercentage / 100),
-//         thumbnail: prod.thumbnail,
-//     }))),
-//     switchMap(products => combineLatest([
-//         of(products),
-//         ...products.map(prod => ajax<{response: any}>({
-//             url: prod.thumbnail,
-//             method: 'GET',
-//             responseType: 'blob',
-//         }))
-//     ])),
-//     map(([products, ...thumbnails]) => products.map((prod, index) => ({
-//         ...prod,
-//         thumbnail: thumbnails[index]?.response,
-//     })))
-//     catchError(error => {
-//         console.error('Could not retrieve products: ', error);
-//         return of(error);
-//     }),
-// );
