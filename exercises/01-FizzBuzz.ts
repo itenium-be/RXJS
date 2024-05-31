@@ -9,4 +9,17 @@ import { map } from 'rxjs/operators';
 // - it's a multiple of 5, then return Buzz
 // - it's a multiple of 3 and 5, then return FizzBuzz
 
-export const fizzBuzz$ = from([1, 2, 'Fizz', 4, 'Buzz', 6, '...']);
+//export const fizzBuzz$ = from([1, 2, 'Fizz', 4, 'Buzz', 6, '...']);
+export const fizzBuzz$ = from(range(1, 26)).pipe(
+  map((x: number) => {
+    if (x % 3 === 0 && x % 5 === 0) {
+      return 'FizzBuzz';
+    } else if (x % 3 === 0) {
+      return 'Fizz';
+    } else if (x % 5 === 0) {
+      return 'Buzz';
+    } else {
+      return x;
+    }
+  })
+);
