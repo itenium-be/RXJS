@@ -1,6 +1,10 @@
 RXJS
 ====
 
+Once [Observable](https://github.com/ReactiveX/rxjs/issues/6367) has been standardized,
+update this repo to RXJS v8.
+
+
 Node: v22.1.0
 
 ```ps1
