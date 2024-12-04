@@ -1,7 +1,14 @@
+import { ControlConfig, FormControl, FormGroup } from '@angular/forms';
+
 export type LoginResponse = Omit<User, 'gender'> & {
   gender: string;
   token: string;
 };
+
+export type LoginForm = {
+  userName: FormControl<string>;
+  password: FormControl<string>;
+}
 
 export type User = {
   id: number;
@@ -80,4 +87,10 @@ export type ProductFilter = {
    * https://dummyjson.com/products/category/{category}
    */
   category?: string;
+};
+
+type RequiredProductFiler = Required<ProductFilter>;
+
+export type ProductFilterForm = {
+  [K in keyof RequiredProductFiler]: FormControl<RequiredProductFiler[K] | null>;
 };

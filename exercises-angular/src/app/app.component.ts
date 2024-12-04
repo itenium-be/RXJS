@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { DummyJsonService } from './dummy-service';
-import { Pagination, ProductFilter } from './models';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { LoginForm, Pagination, ProductFilter, ProductFilterForm } from './models';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -15,20 +15,20 @@ export class AppComponent implements OnInit {
   pagination$ = new Subject<Pagination>();
   filters$ = new Subject<ProductFilter>();
 
-  frm: FormGroup;
-  loginForm: FormGroup;
+  frm: FormGroup<ProductFilterForm>;
+  loginForm: FormGroup<LoginForm>;
 
-  constructor(private service: DummyJsonService, private fb: FormBuilder) {
+  constructor(private service: DummyJsonService, fb: FormBuilder) {
     this.frm = fb.group({
       query: '',
-      productId: null,
-      category: null,
+      productId: null as unknown as number,
+      category: null as unknown as string,
       // limit: 5,
       // skip: 0,
     });
 
-    this.loginForm = fb.group({
-      username: '',
+    this.loginForm = fb.nonNullable.group({
+      userName: '',
       password: '',
     });
   }
